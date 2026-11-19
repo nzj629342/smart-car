@@ -1,0 +1,28 @@
+# Keil MDK 编译中间文件与输出
+Objects/
+Listings/
+RTE/_*/
+*.o
+*.d
+*.dep
+*.crf
+*.axf
+*.lst
+*.map
+*.sct
+*.lnp
+*.htm
+*.iex
+*.bak
+*.build_log.htm
+
+# Keil 用户界面与本地配置
+*.uvguix.*
+*.uvoptx
+*.dbgconf
+*.scvd
+
+# 通用
+.vscode/.history/
+Thumbs.db
+desktop.ini
