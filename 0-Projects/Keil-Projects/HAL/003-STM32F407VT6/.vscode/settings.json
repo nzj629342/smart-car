@@ -1,0 +1,14 @@
+{
+    // Keil 工程树：按 .uvprojx 里登记的文件显示（.h / .md 必须在工程组里才会出现）
+    "KeilAssistant.MDK.Uv4Path": "D:\\Keil5\\UV4\\UV4.exe",
+    "KeilAssistant.ProjectExplorer.SortOrder": "path",
+
+    // 左栏资源管理器不要隐藏头文件和文档
+    "files.exclude": {
+        "**/.git": true
+    },
+    "search.exclude": {
+        "**/MDK-ARM/**/objects": true,
+        "**/MDK-ARM/**/listings": true
+    }
+}

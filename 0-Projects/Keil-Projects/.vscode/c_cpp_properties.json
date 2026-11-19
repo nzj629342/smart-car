@@ -3,14 +3,17 @@
         {
             "name": "003-SPL-STM32F407VT6_003-SPL-STM32F407VT6",
             "includePath": [
-                "d:\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Core\\Inc",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\STM32F4xx_HAL_Driver\\Inc",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\Legacy",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\CMSIS\\Device\\ST\\STM32F4xx\\Include",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\CMSIS\\Include",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\MDK-ARM",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Core\\Src",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\STM32F4xx_HAL_Driver\\Src",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Core\\Inc",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Hardware",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\STM32F4xx_HAL_Driver\\Inc",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\Legacy",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\CMSIS\\Device\\ST\\STM32F4xx\\Include",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\CMSIS\\Include",
+                "D:\\Keil5\\ARM\\ARMCC\\include",
+                "D:\\Keil5\\ARM\\ARMCC\\include\\rw",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\MDK-ARM",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Core\\Src",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\003-STM32F407VT6\\Drivers\\STM32F4xx_HAL_Driver\\Src",
                 "${default}"
             ],
             "defines": [
@@ -93,15 +96,17 @@
         {
             "name": "004-STM32F103C8T6_004-STM32F103C8T6",
             "includePath": [
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Core\\Inc",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\CMSIS\\Include",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\MDK-ARM",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Core\\Src",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\STM32F1xx_HAL_Driver\\Src",
-                "d:\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Hardware",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Core\\Inc",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\CMSIS\\Include",
+                "D:\\Keil5\\ARM\\ARMCC\\include",
+                "D:\\Keil5\\ARM\\ARMCC\\include\\rw",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\MDK-ARM",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Core\\Src",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Drivers\\STM32F1xx_HAL_Driver\\Src",
+                "d:\\git-repositories\\0-Projects\\Keil-Projects\\HAL\\004-STM32F103C8T6\\Hardware",
                 "${default}"
             ],
             "defines": [

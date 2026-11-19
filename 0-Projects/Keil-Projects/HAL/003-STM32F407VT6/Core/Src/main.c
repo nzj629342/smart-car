@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "servo.h"
+#include "servo_tim.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,7 +43,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+/* 三个定时器句柄定义在 servo_tim.c（HAL 时基层），这里通过 servo_tim.h 的
+   extern 声明直接用：htim1 带 4 路，htim9 / htim12 各带 2 路。            */
 
+/* 舵机对象数组：一个元素 = 一个舵机，各自独立的行程/方向/速度/运动方式 */
+#define SERVO_COUNT  SERVO_CHANNEL_COUNT      /* 8 */
+Servo_t servo[SERVO_COUNT];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,7 +70,18 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  /* 8 路演示参数：往返周期(ms)、两端角度(°)、定时模式下的单程时间(ms) */
+  static const uint32_t s_period[SERVO_COUNT]  = {2000U,  2400U,  2800U,  3200U,
+                                                  2000U,  2400U,  2800U,  3200U};
+  static const float    s_lo[SERVO_COUNT]      = {   0.0f,   0.0f,   30.0f,   60.0f,
+                                                      0.0f,  30.0f,   30.0f,   90.0f};
+  static const float    s_hi[SERVO_COUNT]      = { 180.0f, 180.0f,  150.0f,  120.0f,
+                                                    270.0f, 240.0f,  150.0f,  180.0f};
+  static const uint32_t s_move_ms[SERVO_COUNT] = {  900U,   700U,   500U,   300U,
+                                                   1200U,  1000U,   800U,   600U};
 
+  uint32_t last_cmd[SERVO_COUNT] = {0};
+  uint8_t  dir[SERVO_COUNT]      = {0};
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -85,7 +102,36 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
+  /* 1) HAL 时基层：三个定时器各自初始化为 50Hz PWM（1 tick ≈ 1us）
+        内部走 HAL_TIM_PWM_Init()，时钟与 PE/PB 复用脚由 HAL_TIM_PWM_MspInit 处理 */
+  if (MX_TIM1_Init()  != HAL_OK) { Error_Handler(); }
+  if (MX_TIM9_Init()  != HAL_OK) { Error_Handler(); }
+  if (MX_TIM12_Init() != HAL_OK) { Error_Handler(); }
 
+  /* 2) 8 路通道依次绑定：引脚已由 HAL_TIM_PWM_MspInit 配好固定对应关系，
+        这里只声明“哪个定时器的哪个通道”；传 TIM9/TIM12 的 CH3/CH4 会返回 HAL_ERROR */
+  /* 0 号: TIM1_CH1  -> PE9                           */
+  if (Servo_Attach(&servo[0], &htim1, TIM_CHANNEL_1, 500.0f, 2500.0f,   0.0f, 180.0f) != HAL_OK) { Error_Handler(); }
+  /* 1 号: TIM1_CH2  -> PE11                          */
+  if (Servo_Attach(&servo[1], &htim1, TIM_CHANNEL_2, 500.0f, 2500.0f,   0.0f, 180.0f) != HAL_OK) { Error_Handler(); }
+  /* 2 号: TIM1_CH3  -> PE13                          */
+  if (Servo_Attach(&servo[2], &htim1, TIM_CHANNEL_3, 500.0f, 2500.0f,   0.0f, 180.0f) != HAL_OK) { Error_Handler(); }
+  /* 3 号: TIM1_CH4  -> PE14                          */
+  if (Servo_Attach(&servo[3], &htim1, TIM_CHANNEL_4, 500.0f, 2500.0f,   0.0f, 180.0f) != HAL_OK) { Error_Handler(); }
+  /* 4 号: TIM9_CH1  -> PE5（270° 舵机）             */
+  if (Servo_Attach(&servo[4], &htim9, TIM_CHANNEL_1, 500.0f, 2500.0f,   0.0f, 270.0f) != HAL_OK) { Error_Handler(); }
+  /* 5 号: TIM9_CH2  -> PE6（270° 舵机）             */
+  if (Servo_Attach(&servo[5], &htim9, TIM_CHANNEL_2, 500.0f, 2500.0f,   0.0f, 270.0f) != HAL_OK) { Error_Handler(); }
+  /* 6 号: TIM12_CH1 -> PB14                          */
+  if (Servo_Attach(&servo[6], &htim12, TIM_CHANNEL_1, 500.0f, 2500.0f,  0.0f, 180.0f) != HAL_OK) { Error_Handler(); }
+  /* 7 号: TIM12_CH2 -> PB15                          */
+  if (Servo_Attach(&servo[7], &htim12, TIM_CHANNEL_2, 500.0f, 2500.0f,  0.0f, 180.0f) != HAL_OK) { Error_Handler(); }
+
+  /* 3) 每路给不同配置，这样同一个“往返”指令会有不同表现 */
+  Servo_SetSpeedLimit(&servo[0], 100.0f);         /* 0 号 100°/s：180° 约 1.8s 到位 */
+  Servo_SetInverted(&servo[1], 1U);               /* 1 号反装：角度→脉宽镜像       */
+  Servo_SetSpeedLimit(&servo[1], 200.0f);         /* 1 号 200°/s：比 0 号快一倍     */
+  Servo_SetAngleRange(&servo[6], 20.0f, 160.0f);  /* 6 号机构有限位，收紧到 20~160° */
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -95,6 +141,33 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    uint32_t now = HAL_GetTick();
+    uint16_t i;
+
+    /* 8 路各按自己的周期往返，互不干扰：
+       - 0/1 号用“限速模式”：目标角一样，但 1 号反装 → 物理上镜像转动；
+       - 2~7 号用“定时模式”（S 曲线）：单程时间从 300ms 到 1200ms 不等。 */
+    for (i = 0U; i < SERVO_COUNT; i++)
+    {
+      if ((now - last_cmd[i]) >= s_period[i])
+      {
+        last_cmd[i] = now;
+        dir[i] = (dir[i] == 0U) ? 1U : 0U;
+
+        if (i < 2U)
+        {
+          Servo_MoveTo(&servo[i], (dir[i] != 0U) ? s_hi[i] : s_lo[i]);
+        }
+        else
+        {
+          Servo_MoveIn(&servo[i], (dir[i] != 0U) ? s_hi[i] : s_lo[i], s_move_ms[i]);
+        }
+      }
+    }
+
+    /* 1ms 刷新一次状态机（限速与 S 曲线的计算基准，缺了它就不动） */
+    Servo_UpdateAll(servo, SERVO_COUNT);
+    HAL_Delay(1);
   }
   /* USER CODE END 3 */
 }
