@@ -140,7 +140,7 @@ echo ---- 4/4 完成 ----
 echo        远端地址 : 
 git remote get-url %REMOTE%
 echo        最近提交 :
-git log --oneline -3
+git -c i18n.logOutputEncoding=GBK --no-pager log --oneline -3
 echo        跟踪状态 :
 git status -sb
 echo.
